@@ -5,22 +5,23 @@ from mxnet import autograd
 from utils import accuracy, evaluate_accuracy, loadMnistData
 
 batch_size = 256
+
 num_hidden = 256
 
-train_iter, test_iter = loadMnistData(batch_size)
+
 
 net = gluon.nn.Sequential()
 
 with net.name_scope():
     net.add(gluon.nn.Flatten())
-    net.add(gluon.nn.Dense(num_hidden, activation='relu'))
+    net.add(gluon.nn.Dense(256, activation="relu"))
     net.add(gluon.nn.Dense(10))
 
 net.initialize()
-
+train_iter, test_iter = loadMnistData(batch_size)
 trainer = gluon.Trainer(net.collect_params(), 'sgd', {'learning_rate': 0.5})
 
-softmax_loss = gluon.loss.SoftmaxCrossEntropyLoss()
+softmax_cross_entropy = gluon.loss.SoftmaxCrossEntropyLoss()
 
 epochs = 5
 for epoch in range(epochs):
@@ -29,8 +30,8 @@ for epoch in range(epochs):
     for data, label in train_iter:
         with autograd.record():
             output = net(data)
-            loss = softmax_loss(output, label)
-        output.backward()
+            loss = softmax_cross_entropy(output, label)
+        loss.backward()
         trainer.step(batch_size)
 
         total_loss += nd.mean(loss).asscalar()
