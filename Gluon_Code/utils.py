@@ -30,12 +30,8 @@ def getCtx():
 def loadMnistData(batch_size=16, resize=None):
     def transform(data, label):
         if resize:
-            n = data.shape[0]
-            new_data = nd.zeros(shape=(n, resize, resize, data.shape[3]))
-            for i in range(n):
-                new_data[i] = image.imresize(data[i], resize, resize)
-            data = new_data
-        return data.astype('float32').transpose((0, 3, 1, 2)) / 255.0, label.astype('float32')
+            data = image.imresize(data, resize, resize)
+        return data.astype('float32').transpose((2, 0, 1)) / 255.0, label.astype('float32')
     train_data = gluon.data.vision.FashionMNIST(train=True, transform=transform)
     test_data = gluon.data.vision.FashionMNIST(train=False, transform=transform)
 
