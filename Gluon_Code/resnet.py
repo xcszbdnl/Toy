@@ -23,11 +23,12 @@ class Residual(gluon.nn.Block):
             x = self.conv3(x)
         return nd.relu(out + x)
 
-blk = Residual(3, same_shape=True)
+blk = Residual(10, same_shape=False)
 blk.initialize()
 # print("after initialize")
 x = nd.random.uniform(shape=(4, 3, 6, 6))
 y = blk(x)
+print(y.shape)
 
 class ResNet(nn.Block):
     def __init__(self, num_classes, verbose=False, **kwargs):

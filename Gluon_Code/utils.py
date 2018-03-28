@@ -3,6 +3,7 @@ import mxnet as mx
 from mxnet import ndarray as nd
 from mxnet import gluon
 from mxnet import image
+import matplotlib.pyplot as plt
 
 def accuracy(output, label):
     return nd.mean(output.argmax(axis=1) == label).asscalar()
@@ -58,3 +59,15 @@ def load_data_fashion_mnist(batch_size, resize=None, root="~/.mxnet/datasets/fas
     train_data = gluon.data.DataLoader(mnist_train, batch_size, shuffle=True)
     test_data = gluon.data.DataLoader(mnist_test, batch_size, shuffle=False)
     return (train_data, test_data)
+
+def show_images(imgs, nrows, ncols, figsize=None):
+    if not figsize:
+        figsize = (nrows, ncols)
+    _, figs = plt.subplots(nrows, ncols, figsize=figsize)
+    for i in range(nrows):
+        for j in range(ncols):
+            figs[i][j].imshow(imgs[i * ncols + j].asnumpy())
+            figs[i][j].axes.get_xaxis().set_visible(False)
+            figs[i][j].axes.get_yaxis().set_visible(False)
+    plt.show()
+
